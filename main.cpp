@@ -2,33 +2,36 @@
 #include <stdio.h>
 
 int WinMain(HINSTANCE hInstance,
-            HINSTANCE hPrevInstance, 
-            LPTSTR    lpCmdLine, 
-            int       cmdShow)
+            HINSTANCE hPrevInstance,
+            LPTSTR lpCmdLine,
+            int cmdShow)
 {
-    bool wasPressed = false;
-    while(true) {
-        // Check if ctrl+enter is pressed
-        bool keybindPressed = GetKeyState(VK_CONTROL) & 0x8000 && GetKeyState(VK_RETURN) & 0x8000;
-        if(keybindPressed && !wasPressed) {
-            wasPressed = true;
+    if (!RegisterHotKey(
+            NULL,
+            1,
+            MOD_CONTROL | 0x4000,
+            VK_RETURN))
+    {
+        return 1;
+    }
 
-            // Get the Foreground window handle
+    MSG msg = {0};
+    while (GetMessage(&msg, NULL, 0, 0) != 0)
+    {
+        if (msg.message == WM_HOTKEY)
+        {
             HWND handle = GetForegroundWindow();
 
             // Toggle the window topmost state
-            if(GetWindowLong(handle, GWL_EXSTYLE) & WS_EX_TOPMOST) {
+            if (GetWindowLong(handle, GWL_EXSTYLE) & WS_EX_TOPMOST)
+            {
                 SetWindowPos(handle, HWND_NOTOPMOST, 0, 0, 0, 0, SWP_NOMOVE | SWP_NOSIZE);
             }
-            else {
-                SetWindowPos(handle, HWND_TOPMOST, 0, 0, 0, 0, SWP_NOMOVE | SWP_NOSIZE);      
+            else
+            {
+                SetWindowPos(handle, HWND_TOPMOST, 0, 0, 0, 0, SWP_NOMOVE | SWP_NOSIZE);
             }
-        } else if(!keybindPressed && wasPressed) {
-            wasPressed = false;
         }
-        
-        Sleep(100);
     }
     return 0;
 }
-

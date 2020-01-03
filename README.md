@@ -18,6 +18,6 @@ You can use MSVC or MINGW
 ## Win32 Api
 
 -   Running a programming without a console window.
--   Registering keyboard hotkeys (RRegisterHotKey)
+-   Registering keyboard hotkeys (RegisterHotKey)
 -   Getting the current focused window (GetForegroundWindow)
 -   Changing if a window is topmost (SetWindowPos)
